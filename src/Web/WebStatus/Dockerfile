@@ -54,5 +54,13 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+
+RUN mkdir /release
+COPY /newrelic/newrelic-netcore20-agent_9.2.0.0_amd64.deb /release
+RUN dpkg -i /release/newrelic-netcore20-agent_9.2.0.0_amd64.deb
+
+RUN rm /usr/local/newrelic-netcore20-agent/newrelic.config
+COPY /newrelic/newrelic.config /usr/local/newrelic-netcore20-agent
+
 ENTRYPOINT ["dotnet", "WebStatus.dll"]
 

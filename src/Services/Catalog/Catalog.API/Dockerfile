@@ -64,4 +64,12 @@ WORKDIR /app
 COPY --from=publish /app .
 COPY --from=build /src/Services/Catalog/Catalog.API/Proto /app/Proto
 COPY --from=build /src/Services/Catalog/Catalog.API/eshop.pfx .
+
+RUN mkdir /release
+COPY /newrelic/newrelic-netcore20-agent_9.2.0.0_amd64.deb /release
+RUN dpkg -i /release/newrelic-netcore20-agent_9.2.0.0_amd64.deb
+
+RUN rm /usr/local/newrelic-netcore20-agent/newrelic.config
+COPY /newrelic/newrelic.config /usr/local/newrelic-netcore20-agent
+
 ENTRYPOINT ["dotnet", "Catalog.API.dll"]
