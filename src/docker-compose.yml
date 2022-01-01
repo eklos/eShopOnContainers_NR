@@ -24,6 +24,11 @@ services:
       dockerfile: Services/Identity/Identity.API/Dockerfile
     depends_on:
       - sqldata
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Identity.API
 
   basket-api:
     image: ${REGISTRY:-eshop}/basket.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -34,6 +39,11 @@ services:
       - basketdata
       - identity-api
       - rabbitmq
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Basket.API
 
   catalog-api:
     image: ${REGISTRY:-eshop}/catalog.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -43,6 +53,11 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Catalog.API
 
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -52,6 +67,11 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Ordering.API
 
   ordering-backgroundtasks:
     image: ${REGISTRY:-eshop}/ordering.backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
@@ -61,6 +81,11 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Ordering.BackgroundTasks
 
   payment-api:
     image: ${REGISTRY:-eshop}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -69,6 +94,11 @@ services:
       dockerfile: Services/Payment/Payment.API/Dockerfile
     depends_on:
       - rabbitmq
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Payment.API
 
   webhooks-api:
     image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -77,6 +107,11 @@ services:
       dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
     depends_on:
       - sqldata
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Webhooks.API
 
   mobileshoppingapigw:
     image: envoyproxy/envoy:v1.11.1
@@ -94,6 +129,11 @@ services:
       - ordering-api
       - catalog-api
       - basket-api
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Mobile.Bff.Shopping
 
   webshoppingagg:
     image: ${REGISTRY:-eshop}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
@@ -108,6 +148,11 @@ services:
       - ordering-api
       - catalog-api
       - basket-api
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Web.Bff.Shopping
 
   ordering-signalrhub:
     image: ${REGISTRY:-eshop}/ordering.signalrhub:${PLATFORM:-linux}-${TAG:-latest}
@@ -122,12 +167,22 @@ services:
       - ordering-api
       - catalog-api
       - basket-api
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Ordering.SignalrHub
 
   webstatus:
     image: ${REGISTRY:-eshop}/webstatus:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Web/WebStatus/Dockerfile
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=WebStatus
 
   webspa:
     image: ${REGISTRY:-eshop}/webspa:${PLATFORM:-linux}-${TAG:-latest}
@@ -139,6 +194,11 @@ services:
     depends_on:
       - webshoppingagg
       - webshoppingapigw
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=WebSPA
 
   webmvc:
     image: ${REGISTRY:-eshop}/webmvc:${PLATFORM:-linux}-${TAG:-latest}
@@ -148,6 +208,11 @@ services:
     depends_on:
       - webshoppingagg
       - webshoppingapigw
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=WebMVC
 
   webhooks-client:
     image: ${REGISTRY:-eshop}/webhooks.client:${PLATFORM:-linux}-${TAG:-latest}
@@ -156,6 +221,11 @@ services:
       dockerfile: Web/WebhookClient/Dockerfile
     depends_on:
       - webhooks-api
+    env_file: 
+      - ./../newrelic_env.list
+      - ./../newrelic_license.list
+    environment:
+      - NEW_RELIC_APP_NAME=Webhooks.Client
 
   webshoppingapigw:
     image: envoyproxy/envoy:v1.11.1

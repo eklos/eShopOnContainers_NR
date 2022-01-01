@@ -281,3 +281,5 @@ pub/
 src/**/app.yaml
 src/**/inf.yaml
 
+# New Relic files
+newrelic_license.list
