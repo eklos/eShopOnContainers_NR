@@ -1,4 +1,5 @@
-﻿var configuration = GetConfiguration();
+﻿//using NewRelic.LogEnrichers.Serilog;
+var configuration = GetConfiguration();
 
 Log.Logger = CreateSerilogLogger(configuration);
 
@@ -64,9 +65,16 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .MinimumLevel.Verbose()
         .Enrich.WithProperty("ApplicationContext", Program.AppName)
         .Enrich.FromLogContext()
+//        .Enrich.WithThreadName()
+//        .Enrich.WithThreadId()
+//        .Enrich.WithNewRelicLogsInContext()
         .WriteTo.Console()
         .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
         .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
+//        .WriteTo.File(path: @"/var/log/containers/catalog.log")
+//        .WriteTo.File(
+//            formatter: new NewRelic.LogEnrichers.Serilog.NewRelicFormatter(),
+//            path: @"/var/log/containers/catalog.json")
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }
