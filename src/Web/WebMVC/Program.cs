@@ -2,6 +2,10 @@
 
 Log.Logger = CreateSerilogLogger(configuration);
 
+NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+var linkingMetadata = Agent.GetLinkingMetadata();
+Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
 try
 {
     Log.Information("Configuring web host ({ApplicationContext})...", Program.AppName);
@@ -38,7 +42,8 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .ReadFrom.Configuration(configuration)
         .Enrich.WithProperty("ApplicationContext", Program.AppName)
         .Enrich.FromLogContext()
-        .WriteTo.Console();
+        .WriteTo.Console()
+        .WriteTo.NewRelicLogs();
     if (!string.IsNullOrWhiteSpace(seqServerUrl))
     {
         cfg.WriteTo.Seq(seqServerUrl);

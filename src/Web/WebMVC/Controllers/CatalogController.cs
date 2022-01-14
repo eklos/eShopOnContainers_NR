@@ -9,6 +9,12 @@ public class CatalogController : Controller
 
     public async Task<IActionResult> Index(int? BrandFilterApplied, int? TypesFilterApplied, int? page, [FromQuery] string errorMsg)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC CatalogController.Index...");
+
         var itemsPage = 9;
         var catalog = await _catalogSvc.GetCatalogItems(page ?? 0, itemsPage, BrandFilterApplied, TypesFilterApplied);
         var vm = new IndexViewModel()

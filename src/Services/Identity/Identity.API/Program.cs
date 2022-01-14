@@ -1,9 +1,13 @@
-﻿string Namespace = typeof(Startup).Namespace;
+string Namespace = typeof(Startup).Namespace;
 string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
 var configuration = GetConfiguration();
 
 Log.Logger = CreateSerilogLogger(configuration);
+
+NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+var linkingMetadata = Agent.GetLinkingMetadata();
+Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
 try
 {
@@ -64,6 +68,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .WriteTo.Console()
         .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
         .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://localhost:8080" : logstashUrl)
+        .WriteTo.NewRelicLogs()
         .ReadFrom.Configuration(configuration)
         .CreateLogger();
 }

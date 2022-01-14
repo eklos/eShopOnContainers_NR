@@ -23,12 +23,19 @@ public class OrderStatusChangedToPaidDomainEventHandler
 
     public async Task Handle(OrderStatusChangedToPaidDomainEvent orderStatusChangedToPaidDomainEvent, CancellationToken cancellationToken)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.CreateLogger<OrderStatusChangedToPaidDomainEventHandler>()
-            .LogTrace("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
+            .LogInformation("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
                 orderStatusChangedToPaidDomainEvent.OrderId, nameof(OrderStatus.Paid), OrderStatus.Paid.Id);
 
         var order = await _orderRepository.GetAsync(orderStatusChangedToPaidDomainEvent.OrderId);
         var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
+
+        _logger.CreateLogger<OrderStatusChangedToPaidDomainEventHandler>()
+            .LogInformation("$$ Paid Order with buyer: {0}", buyer.Name);
 
         var orderStockList = orderStatusChangedToPaidDomainEvent.OrderItems
             .Select(orderItem => new OrderStockItem(orderItem.ProductId, orderItem.GetUnits()));

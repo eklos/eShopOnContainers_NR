@@ -48,8 +48,13 @@ public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler
 
         var orderStatusChangedTosubmittedIntegrationEvent = new OrderStatusChangedToSubmittedIntegrationEvent(orderStartedEvent.Order.Id, orderStartedEvent.Order.OrderStatus.Name, buyer.Name);
         await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedTosubmittedIntegrationEvent);
+
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.CreateLogger<ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler>()
-            .LogTrace("Buyer {BuyerId} and related payment method were validated or updated for orderId: {OrderId}.",
+            .LogInformation("Buyer {BuyerId} and related payment method were validated or updated for orderId: {OrderId}.",
                 buyerUpdated.Id, orderStartedEvent.Order.Id);
     }
 }

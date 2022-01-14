@@ -1,4 +1,7 @@
-﻿namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Controllers;
+﻿using Serilog;
+using Serilog.Events;
+
+namespace Microsoft.eShopOnContainers.Web.Shopping.HttpAggregator.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]
@@ -78,6 +81,17 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(BasketData), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<BasketData>> UpdateQuantitiesAsync([FromBody] UpdateBasketItemsRequest data)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        foreach (KeyValuePair<string, string> kvp in linkingMetadata)
+        {
+            Log.Information("$$$ In BasketController - Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+        }
+        ////Log.ForContext("Klos", "Ed").Information("$$$ In BasketController - Hello!");
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);// "Klos", "Ed");
+        Log.Information("$$$ In BasketController - Hello!");
+
+
         if (!data.Updates.Any())
         {
             return BadRequest("No updates sent");
@@ -102,7 +116,20 @@ public class BasketController : ControllerBase
         }
 
         // Save the updated basket
-        await _basket.UpdateAsync(currentBasket);
+        try {
+            await _basket.UpdateAsync(currentBasket);
+        }
+        //catch (DivideByZeroException)
+        //{
+        //    throw;
+        //}
+        catch (Exception ex)
+        {
+            Log.Information("$$$ In BasketController - Caught exception:{0}", ex);
+            Log.Information("$$$ In BasketController - Stack trace:{0}", ex.StackTrace);
+            NewRelic.Api.Agent.NewRelic.NoticeError(ex);
+            throw;
+        }
 
         return currentBasket;
     }
@@ -113,6 +140,9 @@ public class BasketController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<ActionResult> AddBasketItemAsync([FromBody] AddBasketItemRequest data)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
         if (data == null || data.Quantity == 0)
         {
             return BadRequest("Invalid payload");

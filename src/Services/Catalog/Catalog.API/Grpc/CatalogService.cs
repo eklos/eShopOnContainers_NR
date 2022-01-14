@@ -19,7 +19,11 @@ public class CatalogService : CatalogBase
 
     public override async Task<CatalogItemResponse> GetItemById(CatalogItemRequest request, ServerCallContext context)
     {
-        _logger.LogInformation("Begin grpc call CatalogService.GetItemById for product id {Id}", request.Id);
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        _logger.LogInformation("Begin grpc call CatalogService.GetItemById<CatalogItemResponse> for product id {Id}", request.Id);
         if (request.Id <= 0)
         {
             context.Status = new Status(StatusCode.FailedPrecondition, $"Id must be > 0 (received {request.Id})");
@@ -54,6 +58,11 @@ public class CatalogService : CatalogBase
 
     public override async Task<PaginatedItemsResponse> GetItemsByIds(CatalogItemsRequest request, ServerCallContext context)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        _logger.LogInformation("Begin grpc call CatalogService.GetItemById<PaginatedItemsResponse>");
         if (!string.IsNullOrEmpty(request.Ids))
         {
             var items = await GetItemsByIdsAsync(request.Ids);

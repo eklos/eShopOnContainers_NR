@@ -33,6 +33,10 @@ public class OrdersController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> CancelOrderAsync([FromBody] CancelOrderCommand command, [FromHeader(Name = "x-requestid")] string requestId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         bool commandResult = false;
 
         if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
@@ -63,6 +67,10 @@ public class OrdersController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> ShipOrderAsync([FromBody] ShipOrderCommand command, [FromHeader(Name = "x-requestid")] string requestId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         bool commandResult = false;
 
         if (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty)
@@ -93,6 +101,10 @@ public class OrdersController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<ActionResult> GetOrderAsync(int orderId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         try
         {
             //Todo: It's good idea to take advantage of GetOrderByIdQuery and handle by GetCustomerByIdQueryHandler
@@ -111,6 +123,10 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<OrderSummary>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<IEnumerable<OrderSummary>>> GetOrdersAsync()
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         var userid = _identityService.GetUserIdentity();
         var orders = await _orderQueries.GetOrdersFromUserAsync(Guid.Parse(userid));
 
@@ -122,6 +138,10 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<CardType>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<IEnumerable<CardType>>> GetCardTypesAsync()
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         var cardTypes = await _orderQueries.GetCardTypesAsync();
 
         return Ok(cardTypes);
@@ -131,6 +151,10 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<OrderDraftDTO>> CreateOrderDraftFromBasketDataAsync([FromBody] CreateOrderDraftCommand createOrderDraftCommand)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.LogInformation(
             "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
             createOrderDraftCommand.GetGenericTypeName(),

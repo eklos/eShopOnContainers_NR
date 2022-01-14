@@ -66,16 +66,16 @@ services:
       dockerfile: Services/Identity/Identity.API/Dockerfile
     depends_on:
       - sqldata
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Identity.API
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "identity.api"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "identity.api"
 
   basket-api:
     image: ${REGISTRY:-eshop}/basket.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -86,16 +86,16 @@ services:
       - basketdata
       - identity-api
       - rabbitmq
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Basket.API
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "basket.api"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "basket.api"
 
   catalog-api:
     image: ${REGISTRY:-eshop}/catalog.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -105,16 +105,16 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Catalog.API
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "catalog.api"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "catalog.api"
 
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -124,16 +124,16 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Ordering.API
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "ordering.api"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "ordering.api"
 
   ordering-backgroundtasks:
     image: ${REGISTRY:-eshop}/ordering.backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
@@ -143,16 +143,16 @@ services:
     depends_on:
       - sqldata
       - rabbitmq
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Ordering.BackgroundTasks
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "ordering.backgroundtasks"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "ordering.backgroundtasks"
 
   payment-api:
     image: ${REGISTRY:-eshop}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -161,16 +161,16 @@ services:
       dockerfile: Services/Payment/Payment.API/Dockerfile
     depends_on:
       - rabbitmq
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Payment.API
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "payment.api"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "payment.api"
 
   webhooks-api:
     image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -179,25 +179,25 @@ services:
       dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
     depends_on:
       - sqldata
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Webhooks.API
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "webhooks.api"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "webhooks.api"
 
   mobileshoppingapigw:
     image: envoyproxy/envoy:v1.11.1
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "mobileshoppingapigw"
-    depends_on:
-      - fluentd
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "mobileshoppingapigw"
+    #depends_on:
+    #  - fluentd
 
 
   mobileshoppingagg:
@@ -213,16 +213,16 @@ services:
       - ordering-api
       - catalog-api
       - basket-api
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Mobile.Bff.Shopping
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "mobileshoppingagg"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "mobileshoppingagg"
 
   webshoppingagg:
     image: ${REGISTRY:-eshop}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
@@ -237,16 +237,16 @@ services:
       - ordering-api
       - catalog-api
       - basket-api
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Web.Bff.Shopping
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "webshoppingagg"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "webshoppingagg"
 
   ordering-signalrhub:
     image: ${REGISTRY:-eshop}/ordering.signalrhub:${PLATFORM:-linux}-${TAG:-latest}
@@ -261,16 +261,16 @@ services:
       - ordering-api
       - catalog-api
       - basket-api
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Ordering.SignalrHub
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "ordering-signalrhub"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "ordering-signalrhub"
 
   webstatus:
     image: ${REGISTRY:-eshop}/webstatus:${PLATFORM:-linux}-${TAG:-latest}
@@ -280,14 +280,14 @@ services:
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
-    depends_on:
-      - fluentd
+    #depends_on:
+    #  - fluentd
     environment:
       - NEW_RELIC_APP_NAME=WebStatus
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "webstatus"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "webstatus"
 
   webspa:
     image: ${REGISTRY:-eshop}/webspa:${PLATFORM:-linux}-${TAG:-latest}
@@ -299,16 +299,16 @@ services:
     depends_on:
       - webshoppingagg
       - webshoppingapigw
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=WebSPA
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "webspa"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "webspa"
 
   webmvc:
     image: ${REGISTRY:-eshop}/webmvc:${PLATFORM:-linux}-${TAG:-latest}
@@ -318,16 +318,16 @@ services:
     depends_on:
       - webshoppingagg
       - webshoppingapigw
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=WebMVC
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "webmvc"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "webmvc"
 
   webhooks-client:
     image: ${REGISTRY:-eshop}/webhooks.client:${PLATFORM:-linux}-${TAG:-latest}
@@ -336,22 +336,22 @@ services:
       dockerfile: Web/WebhookClient/Dockerfile
     depends_on:
       - webhooks-api
-      - fluentd
+    #  - fluentd
     env_file: 
       - ./../newrelic_env.list
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Webhooks.Client
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "Webhooks-client"
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "Webhooks-client"
 
   webshoppingapigw:
     image: envoyproxy/envoy:v1.11.1
-    logging:
-      driver: "fluentd"
-      options:
-        tag: "webshoppingapigw"
-    depends_on:
-      - fluentd
+    #logging:
+    #  driver: "fluentd"
+    #  options:
+    #    tag: "webshoppingapigw"
+    #depends_on:
+    #  - fluentd
