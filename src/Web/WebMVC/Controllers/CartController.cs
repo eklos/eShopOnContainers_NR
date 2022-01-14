@@ -16,6 +16,10 @@ public class CartController : Controller
 
     public async Task<IActionResult> Index()
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         try
         {
             var user = _appUserParser.Parse(HttpContext.User);
@@ -35,6 +39,12 @@ public class CartController : Controller
     [HttpPost]
     public async Task<IActionResult> Index(Dictionary<string, int> quantities, string action)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC CartController.Index...");
+
         try
         {
             var user = _appUserParser.Parse(HttpContext.User);
@@ -54,6 +64,12 @@ public class CartController : Controller
 
     public async Task<IActionResult> AddToCart(CatalogItem productDetails)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC CartController.AdddToCart - productDetails: {0}", productDetails.ToString());
+
         try
         {
             if (productDetails?.Id != null)

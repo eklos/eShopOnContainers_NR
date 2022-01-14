@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
 {
     /// <summary>
     /// This sample controller implements a typical login/logout/provision workflow for local accounts.
@@ -39,6 +39,12 @@
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+            _logger.LogInformation("Login returnUrl:{0}", returnUrl);
+
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (context?.IdP != null)
             {
@@ -59,6 +65,12 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+            _logger.LogInformation("Login email:{0}", model.Email);
+
             if (ModelState.IsValid)
             {
                 var user = await _loginService.FindByUsername(model.Email);
@@ -138,6 +150,12 @@
         [HttpGet]
         public async Task<IActionResult> Logout(string logoutId)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+            _logger.LogInformation("Logout logoutId:{0}", logoutId);
+
             if (User.Identity.IsAuthenticated == false)
             {
                 // if the user is not authenticated, then just show logged out page
@@ -168,6 +186,12 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(LogoutViewModel model)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+            _logger.LogInformation("Logout logoutIdModel:{0}", model.LogoutId);
+
             var idp = User?.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
 
             if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)

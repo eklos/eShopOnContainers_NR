@@ -14,6 +14,10 @@ public class BasketService : Basket.BasketBase
     [AllowAnonymous]
     public override async Task<CustomerBasketResponse> GetBasketById(BasketRequest request, ServerCallContext context)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.LogInformation("Begin grpc call from method {Method} for basket id {Id}", context.Method, request.Id);
 
         var data = await _repository.GetBasketAsync(request.Id);
@@ -34,6 +38,10 @@ public class BasketService : Basket.BasketBase
 
     public override async Task<CustomerBasketResponse> UpdateBasket(CustomerBasketRequest request, ServerCallContext context)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.LogInformation("Begin grpc call BasketService.UpdateBasketAsync for buyer id {Buyerid}", request.Buyerid);
 
         var customerBasket = MapToCustomerBasket(request);

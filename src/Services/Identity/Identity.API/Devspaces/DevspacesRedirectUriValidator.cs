@@ -12,6 +12,9 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Devspaces
 
         public Task<bool> IsPostLogoutRedirectUriValidAsync(string requestedUri, IdentityServer4.Models.Client client)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
             _logger.LogInformation("Client {ClientName} used post logout uri {RequestedUri}.", client.ClientName, requestedUri);
             return Task.FromResult(true);
@@ -19,6 +22,10 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Devspaces
 
         public Task<bool> IsRedirectUriValidAsync(string requestedUri, IdentityServer4.Models.Client client)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
             _logger.LogInformation("Client {ClientName} used post logout uri {RequestedUri}.", client.ClientName, requestedUri);
             return Task.FromResult(true);
         }

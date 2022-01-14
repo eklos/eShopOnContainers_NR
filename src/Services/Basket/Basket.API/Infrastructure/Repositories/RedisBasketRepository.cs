@@ -15,11 +15,13 @@ public class RedisBasketRepository : IBasketRepository
 
     public async Task<bool> DeleteBasketAsync(string id)
     {
+        Log.Information("$$$ In RedisBasketService.DeleteBasketAsync");
         return await _database.KeyDeleteAsync(id);
     }
 
     public IEnumerable<string> GetUsers()
     {
+        Log.Information("$$$ In RedisBasketService.GetUsers");
         var server = GetServer();
         var data = server.Keys();
 
@@ -28,6 +30,7 @@ public class RedisBasketRepository : IBasketRepository
 
     public async Task<CustomerBasket> GetBasketAsync(string customerId)
     {
+        Log.Information("$$$ In RedisBasketService.GetBasketAsync");
         var data = await _database.StringGetAsync(customerId);
 
         if (data.IsNullOrEmpty)
@@ -43,6 +46,7 @@ public class RedisBasketRepository : IBasketRepository
 
     public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
     {
+        Log.Information("$$$ In RedisBasketService.UpdateBasketAsync");
         var created = await _database.StringSetAsync(basket.BuyerId, JsonSerializer.Serialize(basket));
 
         if (!created)

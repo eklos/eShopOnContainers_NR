@@ -9,6 +9,7 @@
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>    
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'PurchaseForMvc' " />
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
@@ -27,6 +28,8 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00834" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="NewRelic.Agent.Api" Version="9.3.0" />
+    <PackageReference Include="Serilog.Sinks.NewRelic.Logs" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,5 +42,9 @@
     <Protobuf Include="..\..\..\Services\Ordering\Ordering.API\Proto\ordering.proto" GrpcServices="Client" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="NewRelic.Agent.Api" />
+    <None Remove="Serilog.Sinks.NewRelic.Logs" />
+  </ItemGroup>
 </Project>
 

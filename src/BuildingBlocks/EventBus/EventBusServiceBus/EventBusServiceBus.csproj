@@ -10,10 +10,16 @@
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.2.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="NewRelic.Agent.Api" Version="9.3.0" />
+    <PackageReference Include="Serilog.Sinks.NewRelic.Logs" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EventBus\EventBus.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="NewRelic.Agent.Api" />
+    <None Remove="Serilog.Sinks.NewRelic.Logs" />
+  </ItemGroup>
 </Project>

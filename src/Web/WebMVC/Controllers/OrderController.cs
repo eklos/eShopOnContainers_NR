@@ -17,6 +17,11 @@ public class OrderController : Controller
 
     public async Task<IActionResult> Create()
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC OrderController.Create");
 
         var user = _appUserParser.Parse(HttpContext.User);
         var order = await _basketSvc.GetOrderDraft(user.Id);
@@ -29,6 +34,12 @@ public class OrderController : Controller
     [HttpPost]
     public async Task<IActionResult> Checkout(Order model)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC OrderController.Checkout");
+
         try
         {
             if (ModelState.IsValid)
@@ -52,6 +63,12 @@ public class OrderController : Controller
 
     public async Task<IActionResult> Cancel(string orderId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC OrderController.Cancel");
+
         await _orderSvc.CancelOrder(orderId);
 
         //Redirect to historic list.
@@ -60,6 +77,12 @@ public class OrderController : Controller
 
     public async Task<IActionResult> Detail(string orderId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC OrderController.Detail - orderId: {0}", orderId);
+
         var user = _appUserParser.Parse(HttpContext.User);
 
         var order = await _orderSvc.GetOrder(user, orderId);
@@ -68,6 +91,12 @@ public class OrderController : Controller
 
     public async Task<IActionResult> Index(Order item)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
+        Log.Information("WebMVC OrderController.Index");
+
         var user = _appUserParser.Parse(HttpContext.User);
         var vm = await _orderSvc.GetMyOrders(user);
         return View(vm);

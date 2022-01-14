@@ -26,6 +26,11 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CustomerBasket>> GetBasketByIdAsync(string id)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Log.Information("$$$ in BasketService.GetBasketByIdAsync");
+
         var basket = await _repository.GetBasketAsync(id);
 
         return Ok(basket ?? new CustomerBasket(id));
@@ -35,6 +40,11 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CustomerBasket>> UpdateBasketAsync([FromBody] CustomerBasket value)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Log.Information("$$$ in BasketService.UpdateBasketAsync");
+
         return Ok(await _repository.UpdateBasketAsync(value));
     }
 
@@ -44,6 +54,11 @@ public class BasketController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout, [FromHeader(Name = "x-requestid")] string requestId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Log.Information("$$$ in BasketService.CheckoutAsync");
+
         var userId = _identityService.GetUserIdentity();
 
         basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
@@ -84,6 +99,11 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
     public async Task DeleteBasketByIdAsync(string id)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Log.Information("$$$ in BasketService.DeleteBasketByIdAsync");
+
         await _repository.DeleteBasketAsync(id);
     }
 }

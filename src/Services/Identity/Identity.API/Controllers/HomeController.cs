@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
+namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
 {
     public class HomeController : Controller
     {
@@ -20,6 +20,10 @@
 
         public IActionResult ReturnToOriginalApplication(string returnUrl)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
             if (returnUrl != null)
                 return Redirect(_redirectSvc.ExtractRedirectUriFromReturnUrl(returnUrl));
             else
@@ -31,6 +35,10 @@
         /// </summary>
         public async Task<IActionResult> Error(string errorId)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
             var vm = new ErrorViewModel();
 
             // retrieve error details from identityserver

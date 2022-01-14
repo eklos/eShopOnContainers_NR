@@ -8,4 +8,12 @@
   <ItemGroup>    
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="NewRelic.Agent.Api" />
+    <None Remove="Serilog.Sinks.NewRelic.Logs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NewRelic.Agent.Api" Version="9.3.0" />
+    <PackageReference Include="Serilog.Sinks.NewRelic.Logs" Version="1.2.0" />
+  </ItemGroup>
 </Project>

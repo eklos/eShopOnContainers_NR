@@ -19,6 +19,10 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         var response = default(TResponse);
         var typeName = request.GetGenericTypeName();
 
@@ -57,6 +61,9 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         catch (Exception ex)
         {
             _logger.LogError(ex, "ERROR Handling transaction for {CommandName} ({@Command})", typeName, request);
+
+            _logger.LogInformation("$$$ caught exception: {0} stackTrace: {1}", ex.Message, ex.StackTrace);
+            NewRelic.Api.Agent.NewRelic.NoticeError(ex);
 
             throw;
         }

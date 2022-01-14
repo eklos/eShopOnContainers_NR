@@ -22,8 +22,12 @@ public class OrderShippedDomainEventHandler
 
     public async Task Handle(OrderShippedDomainEvent orderShippedDomainEvent, CancellationToken cancellationToken)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.CreateLogger<OrderShippedDomainEvent>()
-            .LogTrace("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
+            .LogInformation("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
                 orderShippedDomainEvent.Order.Id, nameof(OrderStatus.Shipped), OrderStatus.Shipped.Id);
 
         var order = await _orderRepository.GetAsync(orderShippedDomainEvent.Order.Id);

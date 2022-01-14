@@ -22,8 +22,12 @@ public class OrderStatusChangedToStockConfirmedDomainEventHandler
 
     public async Task Handle(OrderStatusChangedToStockConfirmedDomainEvent orderStatusChangedToStockConfirmedDomainEvent, CancellationToken cancellationToken)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
         _logger.CreateLogger<OrderStatusChangedToStockConfirmedDomainEventHandler>()
-            .LogTrace("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
+            .LogInformation("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
                 orderStatusChangedToStockConfirmedDomainEvent.OrderId, nameof(OrderStatus.StockConfirmed), OrderStatus.StockConfirmed.Id);
 
         var order = await _orderRepository.GetAsync(orderStatusChangedToStockConfirmedDomainEvent.OrderId);

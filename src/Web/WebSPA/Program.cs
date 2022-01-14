@@ -22,6 +22,7 @@ IWebHost BuildWebHost(string[] args) =>
                 .Enrich.FromLogContext()
                 .WriteTo.Seq("http://seq")
                 .ReadFrom.Configuration(builderContext.Configuration)
-                .WriteTo.Console();
+                .WriteTo.Console()
+                .WriteTo.NewRelicLogs();
         })
         .Build();

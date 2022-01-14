@@ -1,10 +1,13 @@
-﻿//using NewRelic.LogEnrichers.Serilog;
-var configuration = GetConfiguration();
+﻿var configuration = GetConfiguration();
 
 Log.Logger = CreateSerilogLogger(configuration);
 
 try
 {
+    NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+    var linkingMetadata = Agent.GetLinkingMetadata();
+    Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+
     Log.Information("Configuring web host ({ApplicationContext})...", Program.AppName);
     var host = CreateHostBuilder(configuration, args);
 
@@ -76,6 +79,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
 //            formatter: new NewRelic.LogEnrichers.Serilog.NewRelicFormatter(),
 //            path: @"/var/log/containers/catalog.json")
         .ReadFrom.Configuration(configuration)
+        .WriteTo.NewRelicLogs()
         .CreateLogger();
 }
 
