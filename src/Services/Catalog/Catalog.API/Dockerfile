@@ -40,6 +40,7 @@ COPY "Web/WebhookClient/WebhookClient.csproj" "Web/WebhookClient/WebhookClient.c
 COPY "Web/WebMVC/WebMVC.csproj" "Web/WebMVC/WebMVC.csproj"
 COPY "Web/WebSPA/WebSPA.csproj" "Web/WebSPA/WebSPA.csproj"
 COPY "Web/WebStatus/WebStatus.csproj" "Web/WebStatus/WebStatus.csproj"
+COPY "Serilog.Sinks.NewRelic.Logs/Serilog.Sinks.NewRelic.Logs.csproj" "Serilog.Sinks.NewRelic.Logs/Serilog.Sinks.NewRelic.Logs.csproj"
 
 COPY "docker-compose.dcproj" "docker-compose.dcproj"
 

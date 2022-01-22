@@ -27,7 +27,6 @@
     <PackageReference Include="Serilog.Sinks.Http" Version="7.2.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="4.1.0-dev-00166" />
     <PackageReference Include="NewRelic.Agent.Api" Version="9.3.0" />
-    <PackageReference Include="Serilog.Sinks.NewRelic.Logs" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +34,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+    <ProjectReference Include="..\..\..\Serilog.Sinks.NewRelic.Logs\Serilog.Sinks.NewRelic.Logs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

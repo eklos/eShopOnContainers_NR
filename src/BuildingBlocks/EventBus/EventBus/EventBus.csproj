@@ -14,6 +14,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NewRelic.Agent.Api" Version="9.3.0" />
-    <PackageReference Include="Serilog.Sinks.NewRelic.Logs" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Serilog.Sinks.NewRelic.Logs\Serilog.Sinks.NewRelic.Logs.csproj" />
   </ItemGroup>
 </Project>

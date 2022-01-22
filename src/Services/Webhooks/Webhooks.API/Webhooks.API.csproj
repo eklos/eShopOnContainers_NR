@@ -22,7 +22,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="NewRelic.Agent.Api" Version="9.3.0" />
-    <PackageReference Include="Serilog.Sinks.NewRelic.Logs" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +31,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
+    <ProjectReference Include="..\..\..\Serilog.Sinks.NewRelic.Logs\Serilog.Sinks.NewRelic.Logs.csproj" />
   </ItemGroup>
 
   <ItemGroup>
