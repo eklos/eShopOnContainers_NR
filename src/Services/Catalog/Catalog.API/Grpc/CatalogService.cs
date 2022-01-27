@@ -15,15 +15,27 @@ public class CatalogService : CatalogBase
         _settings = settings.Value;
         _catalogContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _logger = logger;
+        Console.WriteLine("{0} @@@ CatalogService... CatalogContext = {1}, IOptions<CatalogSettings> = {2}, ILogger<CatalogService> = {3}", 
+        DateTime.Now.ToLocalTime().ToString(), dbContext, settings, logger);
     }
 
     public override async Task<CatalogItemResponse> GetItemById(CatalogItemRequest request, ServerCallContext context)
     {
+        Console.WriteLine("{0} @@@ GetItemById... CatalogItemRequest = {1}, ServerCallContext = {2}", DateTime.Now.ToLocalTime().ToString(), request, context);
+
         NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
         var linkingMetadata = Agent.GetLinkingMetadata();
+        foreach (KeyValuePair<string, string> kvp in linkingMetadata)
+        {
+            Console.WriteLine("{0} @1@ Key = {1}, Value = {2}", DateTime.Now.ToLocalTime().ToString(), kvp.Key, kvp.Value);
+        }
         Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Console.WriteLine("{0} @@@ linkingMetadata = {1}", DateTime.Now.ToLocalTime().ToString(), linkingMetadata);
 
         _logger.LogInformation("Begin grpc call CatalogService.GetItemById<CatalogItemResponse> for product id {Id}", request.Id);
+
+        Console.WriteLine("{0} @@@ GetItemById... after log call");
+
         if (request.Id <= 0)
         {
             context.Status = new Status(StatusCode.FailedPrecondition, $"Id must be > 0 (received {request.Id})");
@@ -61,6 +73,7 @@ public class CatalogService : CatalogBase
         NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
         var linkingMetadata = Agent.GetLinkingMetadata();
         Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Console.WriteLine("%%% linkingMetadata = {0}", linkingMetadata);
 
         _logger.LogInformation("Begin grpc call CatalogService.GetItemById<PaginatedItemsResponse>");
         if (!string.IsNullOrEmpty(request.Ids))

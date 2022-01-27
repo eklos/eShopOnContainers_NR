@@ -21,9 +21,9 @@ public class PicController : ControllerBase
     // GET: /<controller>/
     public async Task<ActionResult> GetImageAsync(int catalogItemId)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         if (catalogItemId <= 0)
         {

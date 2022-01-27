@@ -25,9 +25,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> ItemsAsync([FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0, string ids = null)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         if (!string.IsNullOrEmpty(ids))
         {
@@ -92,9 +92,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(CatalogItem), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<CatalogItem>> ItemByIdAsync(int id)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         if (id <= 0)
         {
@@ -122,9 +122,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsWithNameAsync(string name, [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var totalItems = await _catalogContext.CatalogItems
             .Where(c => c.Name.StartsWith(name))
@@ -147,9 +147,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsByTypeIdAndBrandIdAsync(int catalogTypeId, int? catalogBrandId, [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
 
@@ -179,9 +179,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsByBrandIdAsync(int? catalogBrandId, [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
 
@@ -209,9 +209,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(List<CatalogType>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<List<CatalogType>>> CatalogTypesAsync()
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         return await _catalogContext.CatalogTypes.ToListAsync();
     }
@@ -222,9 +222,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(typeof(List<CatalogBrand>), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<List<CatalogBrand>>> CatalogBrandsAsync()
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         return await _catalogContext.CatalogBrands.ToListAsync();
     }
@@ -236,9 +236,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.Created)]
     public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var catalogItem = await _catalogContext.CatalogItems.SingleOrDefaultAsync(i => i.Id == productToUpdate.Id);
 
@@ -279,9 +279,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.Created)]
     public async Task<ActionResult> CreateProductAsync([FromBody] CatalogItem product)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var item = new CatalogItem
         {
@@ -307,9 +307,9 @@ public class CatalogController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<ActionResult> DeleteProductAsync(int id)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var product = _catalogContext.CatalogItems.SingleOrDefault(x => x.Id == id);
 
@@ -327,9 +327,9 @@ public class CatalogController : ControllerBase
 
     private List<CatalogItem> ChangeUriPlaceholder(List<CatalogItem> items)
     {
-        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
-        var linkingMetadata = Agent.GetLinkingMetadata();
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+//        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+//        var linkingMetadata = Agent.GetLinkingMetadata();
+//        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
 
         var baseUri = _settings.PicBaseUrl;
         var azureStorageEnabled = _settings.AzureStorageEnabled;

@@ -27,6 +27,7 @@ namespace Serilog.Sinks.NewRelic.Logs
 
         public string InsertKey { get; }
 
+        public bool LogsInContext { get; }
         private IFormatProvider FormatProvider { get; }
 
         public NewRelicLogsSink(
@@ -44,6 +45,15 @@ namespace Serilog.Sinks.NewRelic.Logs
             this.LicenseKey = licenseKey;
             this.InsertKey = insertKey;
             this.FormatProvider = formatProvider;
+            if (Environment.GetEnvironmentVariable("NEW_RELIC_LOGS_IN_CONTEXT") == "true") {
+                this.LogsInContext = true;
+            } else {
+                this.LogsInContext = false;
+
+            }
+
+
+
         }
 
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> eventsEnumerable)
@@ -55,7 +65,7 @@ namespace Serilog.Sinks.NewRelic.Logs
             {
                 try
                 {
-                    var item = new NewRelicLogItem(_event, this.FormatProvider);
+                    var item = new NewRelicLogItem(_event, this.FormatProvider, this.LogsInContext);
 
                     payload.Logs.Add(item);
                 }

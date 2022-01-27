@@ -104,6 +104,8 @@ public class BasketService : IBasketService
 
     public async Task AddItemToBasket(ApplicationUser user, int productId)
     {
+        _logger.LogInformation("Adding item to basket - user: {0} productId: {1}", user, productId);
+
         var uri = API.Purchase.AddItemToBasket(_purchaseUrl);
 
         var newItem = new

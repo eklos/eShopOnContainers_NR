@@ -111,6 +111,7 @@ services:
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Catalog.API
+      - NEW_RELIC_LOGS_IN_CONTEXT=true
     #logging:
     #  driver: "fluentd"
     #  options:
@@ -243,6 +244,7 @@ services:
       - ./../newrelic_license.list
     environment:
       - NEW_RELIC_APP_NAME=Web.Bff.Shopping
+      - NEW_RELIC_LOGS_IN_CONTEXT=true
     #logging:
     #  driver: "fluentd"
     #  options:

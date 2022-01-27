@@ -81,15 +81,11 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(BasketData), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<BasketData>> UpdateQuantitiesAsync([FromBody] UpdateBasketItemsRequest data)
     {
+        Console.WriteLine("{0} $$$ In BasketController::UpdateQuantitiesAsync start", DateTime.Now.ToLocalTime().ToString());
         NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
         var linkingMetadata = Agent.GetLinkingMetadata();
-        foreach (KeyValuePair<string, string> kvp in linkingMetadata)
-        {
-            Log.Information("$$$ In BasketController - Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-        }
-        ////Log.ForContext("Klos", "Ed").Information("$$$ In BasketController - Hello!");
-        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);// "Klos", "Ed");
-        Log.Information("$$$ In BasketController - Hello!");
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Log.Information("$$$ In BasketController::UpdateQuantitiesAsync - Hello!");
 
 
         if (!data.Updates.Any())
@@ -140,9 +136,12 @@ public class BasketController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<ActionResult> AddBasketItemAsync([FromBody] AddBasketItemRequest data)
     {
+        Console.WriteLine("{0} $$$ In BasketController::AddBasketItemAsync start", DateTime.Now.ToLocalTime().ToString());
         NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
         var linkingMetadata = Agent.GetLinkingMetadata();
         Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+        Log.Information("$$$ In BasketController::AddBasketItemAsync - Hello!");
+
         if (data == null || data.Quantity == 0)
         {
             return BadRequest("Invalid payload");

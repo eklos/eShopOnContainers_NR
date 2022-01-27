@@ -97,6 +97,7 @@ public class BasketService : IBasketService
     [NewRelic.Api.Agent.Trace]
     private CustomerBasketRequest MapToCustomerBasketRequest(BasketData basketData)
     {
+        _logger.LogInformation("^^^ MapToCustomerBasketRequest {@basketData}", basketData);
         if (basketData == null)
         {
             return null;
