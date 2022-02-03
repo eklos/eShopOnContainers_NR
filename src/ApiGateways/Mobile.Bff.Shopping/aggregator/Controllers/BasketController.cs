@@ -20,7 +20,11 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(BasketData), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<BasketData>> UpdateAllBasketAsync([FromBody] UpdateBasketRequest data)
     {
-        if (data.Items == null || !data.Items.Any())
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
+         if (data.Items == null || !data.Items.Any())
         {
             return BadRequest("Need to pass at least one basket line");
         }
@@ -77,6 +81,10 @@ public class BasketController : ControllerBase
     [ProducesResponseType(typeof(BasketData), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<BasketData>> UpdateQuantitiesAsync([FromBody] UpdateBasketItemsRequest data)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         if (!data.Updates.Any())
         {
             return BadRequest("No updates sent");
@@ -114,6 +122,10 @@ public class BasketController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<ActionResult> AddBasketItemAsync([FromBody] AddBasketItemRequest data)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         if (data == null || data.Quantity == 0)
         {
             return BadRequest("Invalid payload");

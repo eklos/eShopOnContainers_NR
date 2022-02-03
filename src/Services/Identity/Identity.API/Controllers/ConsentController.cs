@@ -31,6 +31,10 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string returnUrl)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
             var vm = await BuildViewModelAsync(returnUrl);
             ViewData["ReturnUrl"] = returnUrl;
             if (vm != null)

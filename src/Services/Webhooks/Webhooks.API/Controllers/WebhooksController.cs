@@ -20,6 +20,10 @@ public class WebhooksController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<WebhookSubscription>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ListByUser()
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         var userId = _identityService.GetUserIdentity();
         var data = await _dbContext.Subscriptions.Where(s => s.UserId == userId).ToListAsync();
         return Ok(data);
@@ -31,6 +35,10 @@ public class WebhooksController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetByUserAndId(int id)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         var userId = _identityService.GetUserIdentity();
         var subscription = await _dbContext.Subscriptions.SingleOrDefaultAsync(s => s.Id == id && s.UserId == userId);
         if (subscription != null)
@@ -47,6 +55,10 @@ public class WebhooksController : ControllerBase
     [ProducesResponseType(418)]
     public async Task<IActionResult> SubscribeWebhook(WebhookSubscriptionRequest request)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         if (!ModelState.IsValid)
         {
             return ValidationProblem(ModelState);
@@ -84,6 +96,10 @@ public class WebhooksController : ControllerBase
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> UnsubscribeWebhook(int id)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         var userId = _identityService.GetUserIdentity();
         var subscription = await _dbContext.Subscriptions.SingleOrDefaultAsync(s => s.Id == id && s.UserId == userId);
 
