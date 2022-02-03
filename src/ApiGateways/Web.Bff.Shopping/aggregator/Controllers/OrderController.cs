@@ -20,6 +20,10 @@ public class OrderController : ControllerBase
     [ProducesResponseType(typeof(OrderData), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<OrderData>> GetOrderDraftAsync(string basketId)
     {
+        NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+        var linkingMetadata = Agent.GetLinkingMetadata();
+        Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+ 
         if (string.IsNullOrWhiteSpace(basketId))
         {
             return BadRequest("Need a valid basketid");

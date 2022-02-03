@@ -251,6 +251,10 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+    
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -262,6 +266,10 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+    
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
@@ -309,6 +317,10 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Controllers
         [HttpGet]
         public IActionResult Redirecting()
         {
+            NewRelic.Api.Agent.IAgent Agent = NewRelic.Api.Agent.NewRelic.GetAgent();
+            var linkingMetadata = Agent.GetLinkingMetadata();
+            Serilog.Context.LogContext.PushProperty("newrelic.linkingmetadata", linkingMetadata);
+    
             return View();
         }
 
